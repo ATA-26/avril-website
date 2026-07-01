@@ -402,3 +402,49 @@ p{margin:0 0 1rem}
   .field-row,.field-row-3{grid-template-columns:1fr}
   .header-cta .btn{padding:12px 18px;font-size:.92rem}
 }
+
+/* ============================================================
+   Floating "Talk to a real person" widget
+   ============================================================ */
+.talk-fab{position:fixed;right:20px;bottom:20px;z-index:1000;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.talk-fab__btn{
+  position:relative;display:inline-flex;align-items:center;gap:10px;border:none;cursor:pointer;
+  background:var(--brick);color:#fff;font-family:var(--ff-display);font-weight:800;font-size:1rem;
+  padding:15px 22px;border-radius:999px;box-shadow:var(--shadow-lg);
+  transition:transform .15s ease,background .15s ease;
+}
+.talk-fab__btn:hover{background:var(--brick-bright);transform:translateY(-2px)}
+.talk-fab__btn svg{position:relative;z-index:1}
+.talk-fab__label{position:relative;z-index:1}
+.talk-fab__pulse{position:absolute;inset:0;border-radius:999px;animation:talkPulse 2.2s ease-out infinite}
+@keyframes talkPulse{
+  0%{box-shadow:0 0 0 0 rgba(200,32,46,.5)}
+  70%{box-shadow:0 0 0 18px rgba(200,32,46,0)}
+  100%{box-shadow:0 0 0 0 rgba(200,32,46,0)}
+}
+@media (prefers-reduced-motion:reduce){.talk-fab__pulse{animation:none}}
+.talk-fab__panel{
+  width:310px;max-width:calc(100vw - 40px);background:#fff;border:1px solid var(--line);
+  border-radius:18px;box-shadow:var(--shadow-lg);padding:20px;
+}
+.talk-fab__top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:2px}
+.talk-fab__top strong{font-family:var(--ff-display);font-size:1.08rem}
+.talk-fab__x{border:none;background:none;font-size:1.6rem;line-height:1;cursor:pointer;color:var(--slate);padding:0 2px}
+.talk-fab__x:hover{color:var(--ink)}
+.talk-fab__sub{color:var(--slate);font-size:.9rem;margin:0 0 14px}
+.talk-fab__main{
+  display:flex;align-items:center;gap:11px;background:var(--brick);color:#fff;
+  padding:13px 15px;border-radius:12px;font-weight:600;margin-bottom:14px;transition:background .15s ease;
+}
+.talk-fab__main:hover{background:var(--brick-bright)}
+.talk-fab__main b{font-family:var(--ff-display);font-size:1.12rem;display:block}
+.talk-fab__people{display:grid;gap:9px}
+.talk-fab__people a{display:flex;flex-direction:column;padding:11px 13px;border:1px solid var(--line);border-radius:11px;transition:border-color .15s ease,background .15s ease}
+.talk-fab__people a:hover{border-color:var(--brick);background:var(--mist-warm)}
+.talk-fab__people b{font-family:var(--ff-display);font-size:.96rem}
+.talk-fab__people small{color:var(--slate);font-size:.82rem}
+@media (max-width:560px){
+  .talk-fab{right:16px;bottom:16px}
+  .talk-fab__label{display:none}
+  .talk-fab__btn{padding:16px}
+}

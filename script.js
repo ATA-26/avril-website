@@ -66,4 +66,34 @@
       form.reset();
     });
   });
+
+  /* ---- floating "talk to a real person" widget ---- */
+  var talkToggle = document.getElementById("talkToggle");
+  var talkPanel = document.getElementById("talkPanel");
+  var talkClose = document.getElementById("talkClose");
+  if (talkToggle && talkPanel) {
+    var setTalk = function (open) {
+      talkPanel.hidden = !open;
+      talkToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    talkToggle.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      setTalk(talkPanel.hidden);
+    });
+    if (talkClose) {
+      talkClose.addEventListener("click", function () {
+        setTalk(false);
+      });
+    }
+    document.addEventListener("click", function (ev) {
+      if (!talkPanel.hidden && !ev.target.closest(".talk-fab")) {
+        setTalk(false);
+      }
+    });
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape" && !talkPanel.hidden) {
+        setTalk(false);
+      }
+    });
+  }
 })();
