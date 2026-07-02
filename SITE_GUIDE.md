@@ -66,5 +66,9 @@ Order used everywhere (Rodriguez first, then Thomas, then Matute):
 - **DNS:** only the website A-records + `www` CNAME point to GitHub. Leave Google Workspace **MX** and **TXT** records alone.
 - **`.claude/`** folder is git-ignored (local tool files) — don't commit it.
 
-## Open task (not done yet)
-- **Lead form is a front-end demo.** Submissions are NOT emailed or stored anywhere (`script.js` just shows a success message). To capture real leads, wire the forms to a service like **Formspree** (change each `<form>` to POST to a Formspree endpoint) or a CRM/webhook. ~10 min job.
+## Lead forms — LIVE (Formspree)
+Both forms (hero on `index.html`, form on `contact.html`) POST to **Formspree** endpoint `https://formspree.io/f/xgojpebk`, which delivers leads to **andyr@avrilsolutionsnw.com**.
+- Submit is AJAX (`fetch`) in `script.js` → keeps the inline "Thanks" success message; shows a call-us error if the POST fails.
+- Spam: hidden `_gotcha` honeypot + `_subject` set on each form.
+- To change the destination email: do it in the **Formspree dashboard** (not in code). To change which endpoint is used: replace `formspree.io/f/xgojpebk` in both HTML files.
+- Free tier ≈ 50 submissions/month.
