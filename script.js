@@ -41,10 +41,7 @@
     });
   }
 
-  /* ---- lead form: front-end success state ----
-     NOTE: this is a static demo handler. To capture real leads,
-     point the form's action at a service (Formspree, your CRM/webhook)
-     or wire it to email/SMS. See the notes shared with this build. */
+  /* ---- lead forms: submit to Formspree, keep inline success UX ---- */
   document.querySelectorAll("form[data-lead]").forEach(function (form) {
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
@@ -52,18 +49,65 @@
         form.reportValidity();
         return;
       }
-      var success = form.parentNode.querySelector(".form-success");
-      if (success) {
-        var name = (form.querySelector('[name="name"]') || {}).value || "";
-        success.querySelector("[data-name]") &&
-          (success.querySelector("[data-name]").textContent = name
-            ? name.split(" ")[0]
-            : "there");
-        success.classList.add("show");
-        form.classList.add("hide");
-        success.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      var showSuccess = function () {
+        var success = form.parentNode.querySelector(".form-success");
+        if (success) {
+          var nameField = form.querySelector('[name="name"]');
+          var name = (nameField && nameField.value) || "";
+          var nameSlot = success.querySelector("[data-name]");
+          if (nameSlot) nameSlot.textContent = name ? name.split(" ")[0] : "there";
+          success.classList.add("show");
+          form.classList.add("hide");
+          success.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        form.reset();
+      };
+
+      /* No action (e.g. local preview) → fall back to demo success. */
+      if (!form.getAttribute("action")) {
+        showSuccess();
+        return;
       }
-      form.reset();
+
+      var btn = form.querySelector('[type="submit"]');
+      var btnHTML = btn ? btn.innerHTML : "";
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = "Sending…";
+      }
+
+      var oldError = form.querySelector(".form-error");
+      if (oldError) oldError.remove();
+
+      fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" }
+      })
+        .then(function (res) {
+          if (res.ok) {
+            showSuccess();
+          } else {
+            throw new Error("submit failed");
+          }
+        })
+        .catch(function () {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = btnHTML;
+          }
+          var err = document.createElement("p");
+          err.className = "form-error";
+          err.setAttribute("role", "alert");
+          err.innerHTML =
+            'Sorry — something went wrong sending your request. Please call us at <a href="tel:+14256759964">(425) 675-9964</a>.';
+          if (btn && btn.parentNode) {
+            btn.parentNode.insertBefore(err, btn.nextSibling);
+          } else {
+            form.appendChild(err);
+          }
+        });
     });
   });
 
